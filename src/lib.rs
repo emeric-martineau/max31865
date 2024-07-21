@@ -133,7 +133,7 @@ where
     /// You can perform calibration by putting the sensor in boiling (100
     /// degrees Celsius) water and then measuring the raw value using
     /// `read_raw`. Calculate `calib` as `(13851 << 15) / raw >> 1`.
-    pub fn set_calibration(&mut self, calib: u32) -> () {
+    pub fn set_calibration(&mut self, calib: u32) {
         self.calibration = calib;
     }
 
