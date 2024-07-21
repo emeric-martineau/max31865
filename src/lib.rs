@@ -7,9 +7,8 @@
 
 extern crate embedded_hal as hal;
 
-
 use hal::digital::{InputPin, OutputPin};
-use hal::spi::{Mode, Phase, Polarity, ErrorType, SpiBus};
+use hal::spi::{ErrorType, Mode, Phase, Polarity, SpiBus};
 
 #[cfg(feature = "doc")]
 pub mod examples;
@@ -62,7 +61,11 @@ where
     /// * `rdy` - The ready pin which is set low by the MAX31865 controller
     ///           whenever it has finished converting the output.
     ///
-    pub fn new<E: ErrorType>(spi: SPI, mut ncs: NCS, rdy: RDY) -> Result<Max31865<SPI, NCS, RDY>, Error> {
+    pub fn new<E: ErrorType>(
+        spi: SPI,
+        mut ncs: NCS,
+        rdy: RDY,
+    ) -> Result<Max31865<SPI, NCS, RDY>, Error> {
         let default_calib = 40000;
 
         ncs.set_high().map_err(|_| Error::PinError)?;
@@ -196,7 +199,9 @@ where
 
         write_buffer[0] = reg.read_address();
         self.ncs.set_low().map_err(|_| Error::PinError)?;
-        self.spi.transfer(&mut read_buffer, &mut write_buffer).map_err(|_| Error::SpiErrorTransfert)?;
+        self.spi
+            .transfer(&mut read_buffer, &mut write_buffer)
+            .map_err(|_| Error::SpiErrorTransfert)?;
         self.ncs.set_high().map_err(|_| Error::PinError)?;
 
         Ok(read_buffer)
